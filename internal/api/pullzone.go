@@ -19,11 +19,13 @@ import (
 const PullzoneOriginTypeOriginUrl = 0
 const PullzoneOriginTypeDnsAccelerate = 1
 const PullzoneOriginTypeStorageZone = 2
+const PullzoneOriginTypeLoadbalancer = 3
 const PullzoneOriginTypeComputeScript = 4
 const PullzoneOriginTypeComputeContainer = 5
 
 const PullzoneOriginUrlForComputeScript = "https://bunnycdn.com"
 const PullzoneOriginUrlForComputeContainer = "https://bunny.net"
+const PullzoneOriginUrlForLoadbalancer = "https://bunny.net"
 
 type Pullzone struct {
 	Id                  int64  `json:"Id,omitempty"`
@@ -121,6 +123,7 @@ type Pullzone struct {
 	OriginType                uint8  `json:"OriginType"`
 	OriginUrl                 string `json:"OriginUrl,omitempty"`
 	StorageZoneId             int64  `json:"StorageZoneId,omitempty"`
+	LoadbalancerId            int64  `json:"LoadBalancerId,omitempty"`
 	OriginHostHeader          string `json:"OriginHostHeader"`
 	AddHostHeader             bool   `json:"AddHostHeader"`
 	VerifyOriginSSL           bool   `json:"VerifyOriginSSL"`
@@ -264,6 +267,8 @@ func (c *Client) CreatePullzone(data Pullzone) (Pullzone, error) {
 		data.OriginUrl = PullzoneOriginUrlForComputeScript
 	case PullzoneOriginTypeComputeContainer:
 		data.OriginUrl = PullzoneOriginUrlForComputeContainer
+	case PullzoneOriginTypeLoadbalancer:
+		data.OriginUrl = PullzoneOriginUrlForLoadbalancer
 	}
 
 	body, err := json.Marshal(data)
@@ -308,6 +313,8 @@ func (c *Client) UpdatePullzone(dataApi Pullzone) (Pullzone, error) {
 		dataApi.OriginUrl = PullzoneOriginUrlForComputeScript
 	case PullzoneOriginTypeComputeContainer:
 		dataApi.OriginUrl = PullzoneOriginUrlForComputeContainer
+	case PullzoneOriginTypeLoadbalancer:
+		dataApi.OriginUrl = PullzoneOriginUrlForLoadbalancer
 	}
 
 	body, err := json.Marshal(dataApi)
